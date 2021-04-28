@@ -43,8 +43,8 @@ namespace Springy.Editor
         /// <summary>
         /// Project pinned items
         /// </summary>
-        public static readonly ListPref<string> Pinned =
-            new ListPref<string>(
+        public static readonly PrefList<string> Pinned =
+            new PrefList<string>(
                 AsProjectKey("exclude"),
                 EditorPrefs.GetString, EditorPrefs.SetString
             );
