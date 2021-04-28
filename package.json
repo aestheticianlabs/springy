@@ -1,0 +1,7 @@
+{
+	"name": "com.aela.springy",
+	"version": "0.1.0",
+	"displayName": "Springy",
+	"description": "Helps keep the Project window organized by automatically collapsing folders.",
+	"unity": "2020.3"
+}
