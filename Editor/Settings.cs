@@ -1,20 +1,31 @@
 using System;
 using Springy.Editor.Util;
 using UnityEditor;
-using UnityEngine;
 
 namespace Springy.Editor
 {
     internal class Settings : SettingsProvider
     {
-        public const string Prefix = Springy.PackageName;
+        /// <summary>
+        /// Prefix used to store package preferences
+        /// e.g. com.aela.springy
+        /// </summary>
+        private const string Prefix = Springy.PackageName;
+
+        /// <summary>
+        /// Prefix used to store project-specific preferences
+        /// e.g. com.aela.springy/TheCompany.TheProduct
+        /// </summary>
+        private static string ProjectPrefix = Prefix +
+                                              $"/{PlayerSettings.companyName}." +
+                                              $"{PlayerSettings.productName}";
 
         /// <summary>
         /// Whether to automatically collapse folders
         /// </summary>
         public static readonly SettingsPref<bool> AutoCollapse =
             new SettingsPref<bool>(
-                GetPackageKey("autoCollapse"), "Collapse Folders",
+                AsEditorKey("autoCollapse"), "Collapse Folders",
                 EditorPrefs.GetBool, EditorPrefs.SetBool,
                 true
             );
@@ -24,17 +35,18 @@ namespace Springy.Editor
         /// </summary>
         public static readonly SettingsPref<bool> ExpandPinned =
             new SettingsPref<bool>(
-                GetPackageKey("expandPinned"), "Auto-expand Pinned",
+                AsEditorKey("expandPinned"), "Auto-expand Pinned",
                 EditorPrefs.GetBool, EditorPrefs.SetBool,
                 true
             );
-        
+
         /// <summary>
         /// Project pinned items
         /// </summary>
-        public static readonly ProjectPrefs.ListPref<string> Pinned =
-            ProjectPrefs.GetPrefsList(
-                EditorPrefs.GetString, EditorPrefs.SetString, "exclude"
+        public static readonly ListPref<string> Pinned =
+            new ListPref<string>(
+                AsProjectKey("exclude"),
+                EditorPrefs.GetString, EditorPrefs.SetString
             );
 
         private Settings() : base(
@@ -55,10 +67,20 @@ namespace Springy.Editor
             EditorGUILayout.Toggle(pref.Name, pref.Value);
 
         /// <summary>
-        /// Returns a fully qualified preferences key for the package
+        /// Returns a fully qualified preferences key for the
+        /// package at the user/editor level
         /// (i.e. com.aela.springy/TheKey)
         /// </summary>
-        public static string GetPackageKey(string key) => $"{Prefix}/{key}";
+        public static string AsEditorKey(string key) =>
+            $"{Prefix}/{key}";
+
+        /// <summary>
+        /// Returns a fully qualified preferences key for the
+        /// package at the user/editor level
+        /// (i.e. com.aela.springy/TheKey)
+        /// </summary>
+        public static string AsProjectKey(string key) =>
+            $"{ProjectPrefix}/{key}";
 
         [SettingsProvider]
         private static SettingsProvider RegisterProvider() => new Settings();
