@@ -4,6 +4,10 @@ using UnityEditor;
 
 namespace Springy.Editor.Util
 {
+    /// <summary>
+    /// Wraps reflected methods/members from
+    /// <see cref="UnityEditor.ProjectBrowser"/> and related classes.
+    /// </summary>
     internal static class ProjectBrowserUtil
     {
         private static readonly Type projectBrowser;
@@ -66,24 +70,30 @@ namespace Springy.Editor.Util
             isExpanded = GetMethod(
                 assetsTreeViewDataSource, "IsExpanded",
                 BindingFlags.Public | BindingFlags.Instance,
-                new [] { typeof(int) }
+                new[] {typeof(int)}
             );
         }
 
+        /// <summary>
+        /// Sets the expanded state for the folder with the provided instance ID
+        /// </summary>
+        /// <param name="id">The instance ID of the folder</param>
+        /// <param name="state">The expanded state</param>
+        /// <param name="includeChildren">Whether to change children states</param>
         public static void ChangeExpandedState(
             int id, bool state, bool includeChildren = true
         )
         {
             var browser = GetLastInteractedProjectBrowser();
-            
+
             var tree = GetFolderTree(browser);
             if (tree == null) return;
-            
+
             var data = GetTreeData(tree);
             if (data == null) return;
-            
+
             // skip if item is already in desired state
-            if (IsExpanded(data, id) == state) return; 
+            if (IsExpanded(data, id) == state) return;
 
             var item = GetTreeItem(tree, id);
             if (item == null) return;
@@ -93,26 +103,51 @@ namespace Springy.Editor.Util
             );
         }
 
+        /// <summary>
+        /// Returns whether the folder with the provided instance ID is expanded
+        /// in the provided tree data object
+        /// </summary>
+        /// <param name="data">The <see cref="UnityEditor.IMGUI.Controls.TreeViewController.data"/> object</param>
+        /// <param name="id">The instance ID for the folder</param>
         public static bool IsExpanded(object data, int id)
         {
             return (bool) isExpanded.Invoke(data, new object[] {id});
         }
 
+        /// <summary>
+        /// Returns the value of <see cref="UnityEditor.IMGUI.Controls.TreeViewController.data"/>
+        /// on the provided <see cref="UnityEditor.IMGUI.Controls.TreeViewController"/>
+        /// </summary>
         private static object GetTreeData(object tree)
         {
             return treeData.GetValue(tree);
         }
 
+        /// <summary>
+        /// Returns the value of
+        /// <see cref="UnityEditor.ProjectBrowser.s_LastInteractedProjectBrowser"/>.
+        /// This should be the current project browser window.
+        /// </summary>
         private static object GetLastInteractedProjectBrowser()
         {
             return lastInteractedProjectBrowser.GetValue(null);
         }
 
+        /// <summary>
+        /// Returns the folder <see cref="UnityEditor.IMGUI.Controls.TreeViewController"/>
+        /// object from the provided <see cref="UnityEditor.ProjectBrowser"/>
+        /// </summary>
         private static object GetFolderTree(object projectBrowser)
         {
             return tree.GetValue(projectBrowser);
         }
 
+        /// <summary>
+        /// Gets the <see cref="UnityEditor.IMGUI.Controls.TreeViewItem"/>
+        /// for the asset with the provided instance ID
+        /// </summary>
+        /// <param name="tree">The <see cref="UnityEditor.IMGUI.Controls.TreeViewController"/> to search</param>
+        /// <param name="id">The instance ID of the asset</param>
         private static object GetTreeItem(object tree, int id)
         {
             int row = 0;
@@ -156,7 +191,7 @@ namespace Springy.Editor.Util
         }
 
         private static MethodInfo GetMethod(
-            Type type, string name, 
+            Type type, string name,
             BindingFlags flags, Type[] types
         )
         {

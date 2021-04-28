@@ -9,7 +9,17 @@ namespace Springy.Editor
     [InitializeOnLoad]
     public static class Springy
     {
+        /// <summary>
+        /// The name of this package
+        /// </summary>
+        /// <remarks>
+        /// Should always match the name in manifest.json
+        /// </remarks>
         public const string PackageName = "com.aela.springy";
+        
+        /// <summary>
+        /// The path to this package relative to the project folder
+        /// </summary>
         public const string PackagePath = "Packages/" + PackageName;
 
         static Springy()
@@ -17,19 +27,31 @@ namespace Springy.Editor
             EditorApplication.update += EditorUpdate;
         }
 
+        /// <summary>
+        /// Returns whether the folder with the provided guid is pinned
+        /// </summary>
+        /// <param name="guid">The guid of the folder</param>
         public static bool IsFolderPinned(string guid)
         {
             return Settings.Pinned.Contains(guid);
         }
 
-        public static void Exclude(string guid)
+        /// <summary>
+        /// Adds the folder with the provided guid to the pinned list
+        /// </summary>
+        /// <param name="guid">The guid of the folder</param>
+        public static void Pin(string guid)
         {
             // todo: probably should throw an error if the guid is not a valid folder
             if (!Settings.Pinned.Contains(guid))
                 Settings.Pinned.Add(guid);
         }
 
-        public static void Include(string guid)
+        /// <summary>
+        /// Removes the folder with the provided guid from the pinned list
+        /// </summary>
+        /// <param name="guid">The guid of the folder</param>
+        public static void Unpin(string guid)
         {
             if (Settings.Pinned.Contains(guid))
                 Settings.Pinned.Remove(guid);

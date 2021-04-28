@@ -4,6 +4,9 @@ using UnityEditor;
 
 namespace Springy.Editor
 {
+    /// <summary>
+    /// Holds the menu item action and validation methods
+    /// </summary>
     internal static class MenuItems
     {
         private const string ExlcudeMenuOption = "Assets/Pin";
@@ -16,7 +19,7 @@ namespace Springy.Editor
         {
             foreach (var guid in Selection.assetGUIDs.Except(Settings.Pinned))
             {
-                Springy.Exclude(guid);
+                Springy.Pin(guid);
             }
         }
 
@@ -25,7 +28,7 @@ namespace Springy.Editor
         {
             foreach (var guid in Selection.assetGUIDs.Intersect(Settings.Pinned))
             {
-                Springy.Include(guid);
+                Springy.Unpin(guid);
             }
         }
 

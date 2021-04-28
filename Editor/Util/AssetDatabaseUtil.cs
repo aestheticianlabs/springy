@@ -5,6 +5,9 @@ namespace Springy.Editor.Util
 {
     internal static class AssetDatabaseUtil
     {
+        /// <summary>
+        /// Returns whether the provided asset GUID is a valid folder
+        /// </summary>
         public static bool IsValidFolder(string guid)
         {
             return AssetDatabase.IsValidFolder(
@@ -12,6 +15,9 @@ namespace Springy.Editor.Util
             );
         }
 
+        /// <summary>
+        /// Returns the GUID for the asset with the provided instance ID
+        /// </summary>
         public static string GUIDFromInstanceID(int instanceID)
         {
             AssetDatabase.TryGetGUIDAndLocalFileIdentifier(
@@ -20,6 +26,9 @@ namespace Springy.Editor.Util
             return guid;
         }
 
+        /// <summary>
+        /// Returns the instance ID for the asset with the provided GUID
+        /// </summary>
         public static int InstanceIDFromGUID(string guid)
         {
             var path = AssetDatabase.GUIDToAssetPath(guid);

@@ -4,6 +4,9 @@ using UnityEditor;
 
 namespace Springy.Editor
 {
+    /// <summary>
+    /// Manages the settings for the package
+    /// </summary>
     internal class Settings : SettingsProvider
     {
         /// <summary>

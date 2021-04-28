@@ -1,10 +1,11 @@
-// see: https://tech.innogames.com/customizing-unitys-project-window/
-
 using UnityEditor;
 using UnityEngine;
 
 namespace Springy.Editor
 {
+    /// <summary>
+    /// Manages the project window GUI rendering
+    /// </summary>
     [InitializeOnLoad]
     internal static class ProjectWindowGUI
     {
@@ -43,6 +44,7 @@ namespace Springy.Editor
                 || !IsListAsset(rect)
             ) return;
 
+            // draw pin next to pinned folders
             if (Springy.IsFolderPinned(guid))
             {
                 // right aligned on x
