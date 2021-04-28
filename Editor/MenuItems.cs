@@ -36,7 +36,8 @@ namespace Springy.Editor
         private static bool DisableSpringyValidation()
         {
             // selection may not contain excluded assets or non-folders
-            return Selection.assetGUIDs.All(AssetDatabaseUtil.IsValidFolder)
+            return Selection.assetGUIDs
+                       .Where(AssetDatabaseUtil.IsValidFolder).Any()
                    && !Selection.assetGUIDs.Intersect(Settings.Pinned).Any();
         }
 
