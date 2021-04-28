@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Springy.Editor.Util;
@@ -42,7 +43,11 @@ namespace Springy.Editor
         /// <param name="guid">The guid of the folder</param>
         public static void Pin(string guid)
         {
-            // todo: probably should throw an error if the guid is not a valid folder
+            if (!AssetDatabaseUtil.IsValidFolder(guid))
+                throw new ArgumentException(
+                    $"Asset with GUID {guid} is not a valid folder"
+                );
+            
             if (!Settings.Pinned.Contains(guid))
                 Settings.Pinned.Add(guid);
         }
