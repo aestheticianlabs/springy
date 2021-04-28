@@ -26,8 +26,6 @@ namespace Springy.Editor
             }
         }
 
-        private static Texture debug = new Texture2D(12, 12);
-
         static ProjectWindowGUI()
         {
             EditorApplication.projectWindowItemOnGUI += ProjectWindowItemOnGUI;

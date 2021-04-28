@@ -10,10 +10,6 @@ namespace Springy.Editor.Util
     /// </summary>
     internal static class ProjectBrowserUtil
     {
-        private static readonly Type projectBrowser;
-        private static readonly Type treeViewController;
-        private static readonly Type assetsTreeViewDataSource;
-
         private static readonly FieldInfo lastInteractedProjectBrowser;
         private static readonly FieldInfo tree;
 
@@ -28,7 +24,7 @@ namespace Springy.Editor.Util
             var editorAssembly = typeof(EditorUtility).Assembly;
 
             // reflect out ProjectBrowser info
-            projectBrowser = editorAssembly.GetType(
+            var projectBrowser = editorAssembly.GetType(
                 "UnityEditor.ProjectBrowser", true
             );
 
@@ -43,7 +39,7 @@ namespace Springy.Editor.Util
             );
 
             // reflect out TreeViewController info
-            treeViewController = editorAssembly.GetType(
+            var treeViewController = editorAssembly.GetType(
                 "UnityEditor.IMGUI.Controls.TreeViewController", true
             );
 
@@ -63,7 +59,7 @@ namespace Springy.Editor.Util
             );
 
             // reflect out AssetsTreeViewDataSource info
-            assetsTreeViewDataSource = editorAssembly.GetType(
+            var assetsTreeViewDataSource = editorAssembly.GetType(
                 "UnityEditor.AssetsTreeViewDataSource", true
             );
 
@@ -150,8 +146,7 @@ namespace Springy.Editor.Util
         /// <param name="id">The instance ID of the asset</param>
         private static object GetTreeItem(object tree, int id)
         {
-            int row = 0;
-            return getItemAndRowIndex.Invoke(tree, new object[] {id, row});
+            return getItemAndRowIndex.Invoke(tree, new object[] {id, 0});
         }
 
         private static FieldInfo GetField(

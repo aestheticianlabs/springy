@@ -13,13 +13,13 @@ namespace Springy.Editor
         /// Prefix used to store package preferences
         /// e.g. com.aela.springy
         /// </summary>
-        private const string Prefix = Springy.PackageName;
+        private const string prefix = Springy.PackageName;
 
         /// <summary>
         /// Prefix used to store project-specific preferences
         /// e.g. com.aela.springy/TheCompany.TheProduct
         /// </summary>
-        private static string ProjectPrefix = Prefix +
+        private static readonly string projectPrefix = prefix +
                                               $"/{PlayerSettings.companyName}." +
                                               $"{PlayerSettings.productName}";
 
@@ -75,7 +75,7 @@ namespace Springy.Editor
         /// (i.e. com.aela.springy/TheKey)
         /// </summary>
         public static string AsEditorKey(string key) =>
-            $"{Prefix}/{key}";
+            $"{prefix}/{key}";
 
         /// <summary>
         /// Returns a fully qualified preferences key for the
@@ -83,7 +83,7 @@ namespace Springy.Editor
         /// (i.e. com.aela.springy/TheKey)
         /// </summary>
         public static string AsProjectKey(string key) =>
-            $"{ProjectPrefix}/{key}";
+            $"{projectPrefix}/{key}";
 
         [SettingsProvider]
         private static SettingsProvider RegisterProvider() => new Settings();

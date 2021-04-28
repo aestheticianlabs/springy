@@ -9,12 +9,12 @@ namespace Springy.Editor
     /// </summary>
     internal static class MenuItems
     {
-        private const string ExlcudeMenuOption = "Assets/Pin";
-        private const string IncludeMenuOption = "Assets/Unpin";
+        private const string PinMenuOption = "Assets/Pin";
+        private const string UnpinMenuOption = "Assets/Unpin";
         
         private const int Priority = 50;
         
-        [MenuItem(ExlcudeMenuOption, priority = Priority)]
+        [MenuItem(PinMenuOption, priority = Priority)]
         private static void DisableSpringyContextMenu()
         {
             foreach (var guid in Selection.assetGUIDs.Except(Settings.Pinned))
@@ -23,7 +23,7 @@ namespace Springy.Editor
             }
         }
 
-        [MenuItem(IncludeMenuOption, priority = Priority + 1)]
+        [MenuItem(UnpinMenuOption, priority = Priority + 1)]
         private static void EnableSpringyContextMenu()
         {
             foreach (var guid in Selection.assetGUIDs.Intersect(Settings.Pinned))
@@ -32,7 +32,7 @@ namespace Springy.Editor
             }
         }
 
-        [MenuItem(ExlcudeMenuOption, true)]
+        [MenuItem(PinMenuOption, true)]
         private static bool DisableSpringyValidation()
         {
             // selection may not contain excluded assets or non-folders
@@ -41,7 +41,7 @@ namespace Springy.Editor
                    && !Selection.assetGUIDs.Intersect(Settings.Pinned).Any();
         }
 
-        [MenuItem(IncludeMenuOption, true)]
+        [MenuItem(UnpinMenuOption, true)]
         private static bool EnableSpringyValidation()
         {
             // selection may only contain excluded assets
