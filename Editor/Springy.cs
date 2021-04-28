@@ -44,23 +44,25 @@ namespace Springy.Editor
 
         private static void EditorUpdate()
         {
-            // collapses all items that aren't currently selected or a parent of selected
-
             // get selected items and their ancestors
             var selected = GetWithAncestors(
                 Selection.instanceIDs.ToList()
             );
 
-            // get pinned items instance ids
-            var pinnedIDs = PinnedGUIDs.Select(
+            // get pinned items' and their ancestors' instance ids
+            var pinnedIDs = GetWithAncestors(PinnedGUIDs.Select(
                 AssetDatabaseUtil.InstanceIDFromGUID
-            );
+            ));
+            
+            // expand all pinned items
+            foreach (var item in pinnedIDs)
+            {
+                ProjectBrowserUtil.ChangeExpandedState(item, true);
+            }
 
             // filter out items that aren't selected or pinned
             var items = InternalEditorUtility.expandedProjectWindowItems;
-            var collapse = items
-                .Except(selected)
-                .Except(GetWithAncestors(pinnedIDs));
+            var collapse = items.Except(selected).Except(pinnedIDs);
 
             // collapse items
             foreach (var item in collapse)
