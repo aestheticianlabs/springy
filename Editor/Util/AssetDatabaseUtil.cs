@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Springy.Editor
+namespace Springy.Editor.Util
 {
     internal static class AssetDatabaseUtil
     {

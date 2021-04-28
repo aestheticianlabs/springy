@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 
-namespace Springy.Editor
+namespace Springy.Editor.Util
 {
     /// <summary>
     /// Manages project-specific editor preferences

@@ -2,7 +2,7 @@ using System;
 using System.Reflection;
 using UnityEditor;
 
-namespace Springy.Editor
+namespace Springy.Editor.Util
 {
     internal static class ProjectBrowserUtil
     {
