@@ -11,36 +11,35 @@ namespace Springy.Editor
     {
         public const string PackagePath = "Packages/com.aela.springy";
         
-        // todo: Better language than "exclude." Maybe "pinned" or "ignored?"
-        private static ProjectPrefs.PrefsList<string> exclude;
+        private static readonly ProjectPrefs.PrefsList<string> pinned;
 
         /// <summary>
         /// Asset GUIDs that are not auto-collapsed
         /// </summary>
-        public static IEnumerable<string> ExcludedGUIDs => exclude;
+        public static IEnumerable<string> PinnedGUIDs => pinned;
 
         static Springy()
         {
             EditorApplication.update += EditorUpdate;
-            exclude = ProjectPrefs.GetPrefsList(
+            pinned = ProjectPrefs.GetPrefsList(
                 EditorPrefs.GetString, EditorPrefs.SetString, "exclude"
             );
         }
 
         public static bool IsAssetExcluded(string guid) =>
-            exclude.Contains(guid);
+            pinned.Contains(guid);
 
         public static void Exclude(string guid)
         {
             // todo: probably should throw an error if the guid is not a valid folder
-            if (!exclude.Contains(guid))
-                exclude.Add(guid);
+            if (!pinned.Contains(guid))
+                pinned.Add(guid);
         }
 
         public static void Include(string guid)
         {
-            if (exclude.Contains(guid))
-                exclude.Remove(guid);
+            if (pinned.Contains(guid))
+                pinned.Remove(guid);
         }
 
         private static void EditorUpdate()
@@ -52,16 +51,16 @@ namespace Springy.Editor
                 Selection.instanceIDs.ToList()
             );
 
-            // get exclude list instance ids
-            var excludeIDs = exclude.Select(
+            // get pinned items instance ids
+            var pinnedIDs = PinnedGUIDs.Select(
                 AssetDatabaseUtil.InstanceIDFromGUID
             );
 
-            // filter out items that aren't selected or excluded
+            // filter out items that aren't selected or pinned
             var items = InternalEditorUtility.expandedProjectWindowItems;
             var collapse = items
                 .Except(selected)
-                .Except(GetWithAncestors(excludeIDs));
+                .Except(GetWithAncestors(pinnedIDs));
 
             // collapse items
             foreach (var item in collapse)

@@ -14,7 +14,7 @@ namespace Springy.Editor
         [MenuItem(ExlcudeMenuOption, priority = Priority)]
         private static void DisableSpringyContextMenu()
         {
-            foreach (var guid in Selection.assetGUIDs.Except(Springy.ExcludedGUIDs))
+            foreach (var guid in Selection.assetGUIDs.Except(Springy.PinnedGUIDs))
             {
                 Springy.Exclude(guid);
             }
@@ -23,7 +23,7 @@ namespace Springy.Editor
         [MenuItem(IncludeMenuOption, priority = Priority + 1)]
         private static void EnableSpringyContextMenu()
         {
-            foreach (var guid in Selection.assetGUIDs.Intersect(Springy.ExcludedGUIDs))
+            foreach (var guid in Selection.assetGUIDs.Intersect(Springy.PinnedGUIDs))
             {
                 Springy.Include(guid);
             }
@@ -34,14 +34,14 @@ namespace Springy.Editor
         {
             // selection may not contain excluded assets or non-folders
             return Selection.assetGUIDs.All(AssetDatabaseUtil.IsValidFolder)
-                   && !Selection.assetGUIDs.Intersect(Springy.ExcludedGUIDs).Any();
+                   && !Selection.assetGUIDs.Intersect(Springy.PinnedGUIDs).Any();
         }
 
         [MenuItem(IncludeMenuOption, true)]
         private static bool EnableSpringyValidation()
         {
             // selection may only contain excluded assets
-            return Selection.assetGUIDs.Intersect(Springy.ExcludedGUIDs).Any();
+            return Selection.assetGUIDs.Intersect(Springy.PinnedGUIDs).Any();
         }
     }
 }
