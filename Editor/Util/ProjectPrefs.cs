@@ -17,9 +17,9 @@ namespace Springy.Editor.Util
 
         static ProjectPrefs()
         {
-            // e.g. Springy/TheCompany.TheProduct
-            prefix = $"Springy/" +
-                     $"{PlayerSettings.companyName}." +
+            // e.g. com.aela.springy/TheCompany.TheProduct
+            prefix = Settings.Prefix +
+                     $"/{PlayerSettings.companyName}." +
                      $"{PlayerSettings.productName}";
         }
 
@@ -55,16 +55,16 @@ namespace Springy.Editor.Util
         }
 
         /// <summary>
-        /// Returns a <see cref="PrefsList{T}"/> for the provided key and getter/setters
+        /// Returns a <see cref="ListPref{T}"/> for the provided key and getter/setters
         /// </summary>
         /// <param name="getter">The <see cref="EditorPrefs"/> getter method</param>
         /// <param name="setter">The <see cref="EditorPrefs"/> setter method</param>
         /// <param name="key">The pref list key</param>
-        public static PrefsList<T> GetPrefsList<T>(
+        public static ListPref<T> GetPrefsList<T>(
             Func<string, T> getter, Action<string, T> setter, string key
         )
         {
-            return new PrefsList<T>(key, getter, setter);
+            return new ListPref<T>(key, getter, setter);
         }
 
         /// <summary>
@@ -76,12 +76,11 @@ namespace Springy.Editor.Util
         /// <summary>
         /// Returns <paramref name="key"/> with the project prefix added
         /// </summary>
-        private static string GetFullKey(string key) => $"{prefix}/{key}";
+        public static string GetFullKey(string key) => $"{prefix}/{key}";
 
-        public class PrefsList<T> : IEnumerable<T>
+        public class ListPref<T> : IEnumerable<T>
         {
             private readonly string key;
-            private readonly string countKey;
             private readonly Func<string, T> getter;
             private readonly Action<string, T> setter;
 
@@ -91,59 +90,53 @@ namespace Springy.Editor.Util
                 set => Set(i, value);
             }
 
-            private int Count
-            {
-                get => GetValue(EditorPrefs.GetInt, countKey);
-                set => SetValue(EditorPrefs.SetInt, countKey, value);
-            }
+            private readonly Pref<int> count;
 
-            public PrefsList(
+            public ListPref(
                 string key,
                 Func<string, T> getter,
                 Action<string, T> setter
             )
             {
                 this.key = key;
-                countKey = key + "/Count";
-
                 this.getter = getter;
                 this.setter = setter;
-
-                if (!HasKey(countKey))
-                {
-                    SetValue(EditorPrefs.SetInt, countKey, 0);
-                }
+                
+                count = new Pref<int>(
+                    GetFullKey(key + "/Count"), 
+                    EditorPrefs.GetInt, EditorPrefs.SetInt
+                );
             }
 
             public T ElementAt(int i)
             {
-                if (i >= Count || i < 0) throw new IndexOutOfRangeException();
+                if (i >= count || i < 0) throw new IndexOutOfRangeException();
                 return GetValue(getter, GetIndexKey(i));
             }
 
             public void Add(T value)
             {
-                SetValue(setter, GetIndexKey(Count), value);
-                Count++;
+                SetValue(setter, GetIndexKey(count), value);
+                count.Value++;
             }
 
             public void Set(int i, T value)
             {
-                if (i >= Count || i < 0) throw new IndexOutOfRangeException();
+                if (i >= count || i < 0) throw new IndexOutOfRangeException();
                 SetValue(setter, GetIndexKey(i), value);
             }
 
             public void RemoveAt(int i)
             {
-                if (i >= Count || i < 0) throw new IndexOutOfRangeException();
+                if (i >= count || i < 0) throw new IndexOutOfRangeException();
 
                 // shift all elements ahead of index back by one
-                for (int j = i; j < Count - 1; j++)
+                for (int j = i; j < count - 1; j++)
                 {
                     Set(i, ElementAt(i + 1));
                 }
 
-                Count--;
+                count.Value--;
             }
 
             public void Remove(T value)
@@ -161,7 +154,7 @@ namespace Springy.Editor.Util
 
             public int IndexOf(T value)
             {
-                for (int i = 0; i < Count; i++)
+                for (int i = 0; i < count; i++)
                 {
                     if (ElementAt(i).Equals(value))
                     {
@@ -174,7 +167,7 @@ namespace Springy.Editor.Util
 
             public IEnumerator<T> GetEnumerator()
             {
-                for (int i = 0; i < Count; i++)
+                for (int i = 0; i < count; i++)
                 {
                     yield return GetValue(getter, GetIndexKey(i));
                 }

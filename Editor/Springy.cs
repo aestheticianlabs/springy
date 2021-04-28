@@ -3,16 +3,16 @@ using System.Linq;
 using Springy.Editor.Util;
 using UnityEditor;
 using UnityEditorInternal;
-using UnityEngine;
 
 namespace Springy.Editor
 {
     [InitializeOnLoad]
     public static class Springy
     {
-        public const string PackagePath = "Packages/com.aela.springy";
-        
-        private static readonly ProjectPrefs.PrefsList<string> pinned;
+        public const string PackageName = "com.aela.springy";
+        public const string PackagePath = "Packages/" + PackageName;
+
+        private static readonly ProjectPrefs.ListPref<string> pinned;
 
         /// <summary>
         /// Asset GUIDs that are not auto-collapsed
@@ -51,19 +51,40 @@ namespace Springy.Editor
             );
 
             // get pinned items' and their ancestors' instance ids
-            var pinnedIDs = GetWithAncestors(PinnedGUIDs.Select(
-                AssetDatabaseUtil.InstanceIDFromGUID
-            ));
-            
+            var pinnedIDs = GetWithAncestors(
+                PinnedGUIDs.Select(
+                    AssetDatabaseUtil.InstanceIDFromGUID
+                )
+            );
+
             // expand all pinned items
-            foreach (var item in pinnedIDs)
+            if (Settings.ExpandPinned)
+            {
+                ExpandPinned(pinnedIDs);
+            }
+
+            // auto-collapse unpinned and unselected items
+            if (Settings.AutoCollapse)
+            {
+                AutoCollapse(selected, pinnedIDs);
+            }
+        }
+
+        private static void ExpandPinned(IEnumerable<int> pinned)
+        {
+            foreach (var item in pinned)
             {
                 ProjectBrowserUtil.ChangeExpandedState(item, true);
             }
+        }
 
+        private static void AutoCollapse(
+            IEnumerable<int> selected, IEnumerable<int> pinned
+        )
+        {
             // filter out items that aren't selected or pinned
             var items = InternalEditorUtility.expandedProjectWindowItems;
-            var collapse = items.Except(selected).Except(pinnedIDs);
+            var collapse = items.Except(selected).Except(pinned);
 
             // collapse items
             foreach (var item in collapse)
@@ -72,7 +93,7 @@ namespace Springy.Editor
             }
         }
 
-        
+
         private static IEnumerable<int> GetWithAncestors(
             IEnumerable<int> source
         )
