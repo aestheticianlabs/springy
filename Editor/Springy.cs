@@ -3,6 +3,7 @@ using System.Linq;
 using Springy.Editor.Util;
 using UnityEditor;
 using UnityEditorInternal;
+using UnityEngine;
 
 namespace Springy.Editor
 {
@@ -78,8 +79,8 @@ namespace Springy.Editor
         {
             // todo: this probably could be optimized
             return source.Union(
-                source.SelectMany(ProjectWindowUtil.GetAncestors).Distinct()
-            );
+                source.SelectMany(ProjectWindowUtil.GetAncestors)
+            ).Distinct();
         }
     }
 }
