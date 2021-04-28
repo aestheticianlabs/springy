@@ -12,35 +12,27 @@ namespace Springy.Editor
         public const string PackageName = "com.aela.springy";
         public const string PackagePath = "Packages/" + PackageName;
 
-        private static readonly ProjectPrefs.ListPref<string> pinned;
-
-        /// <summary>
-        /// Asset GUIDs that are not auto-collapsed
-        /// </summary>
-        public static IEnumerable<string> PinnedGUIDs => pinned;
-
         static Springy()
         {
             EditorApplication.update += EditorUpdate;
-            pinned = ProjectPrefs.GetPrefsList(
-                EditorPrefs.GetString, EditorPrefs.SetString, "exclude"
-            );
         }
 
-        public static bool IsAssetExcluded(string guid) =>
-            pinned.Contains(guid);
+        public static bool IsFolderPinned(string guid)
+        {
+            return Settings.Pinned.Contains(guid);
+        }
 
         public static void Exclude(string guid)
         {
             // todo: probably should throw an error if the guid is not a valid folder
-            if (!pinned.Contains(guid))
-                pinned.Add(guid);
+            if (!Settings.Pinned.Contains(guid))
+                Settings.Pinned.Add(guid);
         }
 
         public static void Include(string guid)
         {
-            if (pinned.Contains(guid))
-                pinned.Remove(guid);
+            if (Settings.Pinned.Contains(guid))
+                Settings.Pinned.Remove(guid);
         }
 
         private static void EditorUpdate()
@@ -52,7 +44,7 @@ namespace Springy.Editor
 
             // get pinned items' and their ancestors' instance ids
             var pinnedIDs = GetWithAncestors(
-                PinnedGUIDs.Select(
+                Settings.Pinned.Select(
                     AssetDatabaseUtil.InstanceIDFromGUID
                 )
             );
@@ -92,7 +84,6 @@ namespace Springy.Editor
                 ProjectBrowserUtil.ChangeExpandedState(item, false);
             }
         }
-
 
         private static IEnumerable<int> GetWithAncestors(
             IEnumerable<int> source

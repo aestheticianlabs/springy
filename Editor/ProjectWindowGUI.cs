@@ -43,7 +43,7 @@ namespace Springy.Editor
                 || !IsListAsset(rect)
             ) return;
 
-            if (Springy.IsAssetExcluded(guid))
+            if (Springy.IsFolderPinned(guid))
             {
                 // right aligned on x
                 rect.x += rect.width - IconSize - RightPad;

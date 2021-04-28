@@ -8,7 +8,7 @@ namespace Springy.Editor
     internal class Settings : SettingsProvider
     {
         public const string Prefix = Springy.PackageName;
-        
+
         /// <summary>
         /// Whether to automatically collapse folders
         /// </summary>
@@ -27,6 +27,14 @@ namespace Springy.Editor
                 GetPackageKey("expandPinned"), "Auto-expand Pinned",
                 EditorPrefs.GetBool, EditorPrefs.SetBool,
                 true
+            );
+        
+        /// <summary>
+        /// Project pinned items
+        /// </summary>
+        public static readonly ProjectPrefs.ListPref<string> Pinned =
+            ProjectPrefs.GetPrefsList(
+                EditorPrefs.GetString, EditorPrefs.SetString, "exclude"
             );
 
         private Settings() : base(
@@ -55,14 +63,14 @@ namespace Springy.Editor
         [SettingsProvider]
         private static SettingsProvider RegisterProvider() => new Settings();
     }
-    
+
     internal class SettingsPref<T> : Pref<T>
     {
         /// <summary>
         /// Human-readable name
         /// </summary>
         public readonly string Name;
-        
+
         public SettingsPref(
             string key, string name,
             Func<string, T, T> getter, Action<string, T> setter,
