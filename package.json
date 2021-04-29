@@ -3,5 +3,8 @@
 	"version": "0.1.0",
 	"displayName": "Springy",
 	"description": "Helps keep the Project window organized by automatically collapsing folders.",
+	"documentationUrl": "https://github.com/aestheticianlabs/springy",
+	"changelogUrl": "https://github.com/aestheticianlabs/springy/releases",
+	"licensesUrl": "https://github.com/aestheticianlabs/springy/blob/master/LICENSE.txt",
 	"unity": "2020.3"
 }
