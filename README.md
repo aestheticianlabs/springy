@@ -133,6 +133,15 @@ PRs with commit messages that do not follow the specification will be rejected.
 
 The Conventional Commit specification generally follows this format: 
 `type(scope?): description` (scope is optional, hence the `?`). 
+
+Here are some example commit messages for reference:
+
+`feat: add pinned folders`
+
+`fix(reflection): update types for Unity 2021.1`
+
+`perf: improve project window GUI performance`
+
 For more detail, see the [Conventional Commits specification][4].
 
 ### Common types
