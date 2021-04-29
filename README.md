@@ -4,6 +4,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-informational)](LICENSE.md)
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome!-brightgreen)](#contributing)
 
+![Demo gif](Documentation~/img/demo.gif)
+
 Springy is a Unity editor extension that automatically collapses folders in the
 project window when it is in the one-column layout.
 
