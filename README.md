@@ -1,6 +1,6 @@
 # Springy
 
-[![Unity 2020.3](https://img.shields.io/badge/Unity-2020.3+-informational)][1]
+[![Unity 2018.4+](https://img.shields.io/badge/Unity-2018.4+-informational)][1]
 [![License: MIT](https://img.shields.io/badge/License-MIT-informational)](LICENSE.md)
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome!-brightgreen)](#contributing)
 
@@ -11,8 +11,8 @@ project window when it is in the one-column layout.
 
 ### Requirements
 
-Springy has been tested and confirmed to work with Unity 2020.3 but you are
-welcome to try newer/older versions.
+Springy has been tested and confirmed to work with Unity 2018.4 through 2020.3 
+but you are welcome to try newer/older versions.
 
 If you identify a compatible version that isn't already listed here or you 
 add support for an incompatible version, please create a [PR](#contributing).
